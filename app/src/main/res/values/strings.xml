@@ -14,4 +14,5 @@
     <string name="credit_card">Credit card</string>
     <string name="bank_account">Bank account</string>
     <string name="paypal">Paypal</string>
+    <string name="get_started">Get started</string>
 </resources>

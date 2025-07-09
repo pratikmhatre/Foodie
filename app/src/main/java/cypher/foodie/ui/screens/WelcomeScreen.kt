@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cypher.foodie.R
+import cypher.foodie.ui.components.BigButton
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.roundedTypography
 import cypher.foodie.ui.theme.spacing
@@ -37,14 +39,16 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 .background(MaterialTheme.colorScheme.primary), contentAlignment = Alignment.TopStart
         ) {
             Column(Modifier.padding(MaterialTheme.spacing.xxLarge)) {
-                Box(modifier = Modifier.background(Color.White, shape = CircleShape)) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.White, shape = CircleShape)
+                        .size(75.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     Image(
-                        painter = painterResource(R.drawable.img_chef_small),
+                        painter = painterResource(R.drawable.img_chef_big),
                         contentDescription = "",
-                        modifier = Modifier
-                            .padding(
-                                MaterialTheme.spacing.large
-                            )
+                        modifier = Modifier.padding(MaterialTheme.spacing.medium)
                     )
                 }
                 Spacer(Modifier.height(MaterialTheme.spacing.extraLarge))
@@ -58,7 +62,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 180.dp)
+                    .padding(bottom = 190.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.img_toyface_first), contentDescription = "", Modifier
@@ -70,7 +74,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(R.drawable.img_toyface_second), contentDescription = "", Modifier
                         .align(
-                            Alignment.CenterEnd
+                            Alignment.BottomEnd
                         )
                         .scale(1.5f)
                 )
@@ -78,12 +82,27 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .background(brush = Brush.verticalGradient(
-                        colors = listOf(Color(0x0dFA4A0C), Color(0x3dFA4A0C), MaterialTheme.colorScheme.primary)
-                    ))
+                    .height(300.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0x00FA4A0C),
+                                Color(0xB3FA4A0C),
+                                Color(0xCCFA4A0C),
+                                Color(0xE6FA4A0C),
+                                Color(0xFFFA4A0C),
+                                MaterialTheme.colorScheme.primary
+                            )
+                        )
+                    )
                     .align(Alignment.BottomCenter)
             )
+
+            BigButton(
+                text = R.string.get_started,
+                isPrimaryButton = false,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) { }
         }
     }
 }
