@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.dp
 private val DarkColorScheme = darkColorScheme(
     primary = ThemeOrange,
     secondary = ThemeCrimson,
-    tertiary = Pink40
+    tertiary = Pink40,
+    background = BGGray
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = ThemeOrange,
     secondary = ThemeCrimson,
-    tertiary = Pink40
+    tertiary = Pink40,
+    background = BGGray
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -38,7 +40,7 @@ private val LightColorScheme = lightColorScheme(
 private val shapes = Shapes(
     extraSmall = RoundedCornerShape(8.dp),
     small = RoundedCornerShape(10.dp),
-    medium = RoundedCornerShape(2.dp),
+    medium = RoundedCornerShape(20.dp),
     large = RoundedCornerShape(30.dp)
 )
 

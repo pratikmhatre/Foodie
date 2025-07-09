@@ -4,4 +4,14 @@
     <string name="error_subtitle_no_network">Your internet connection appears to be offline.</string>
     <string name="try_again">Try again</string>
     <string name="start_ordering">Start ordering</string>
+    <string name="my_profile">My Profile</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="profile_information">Profile information</string>
+    <string name="users_name">Json Bourne</string>
+    <string name="users_email">cypher@onionmail.com</string>
+    <string name="users_address">86/6-10 Alex Parade, Redfern, New South Wales, Australia </string>
+    <string name="payment_methods">Payment methods</string>
+    <string name="credit_card">Credit card</string>
+    <string name="bank_account">Bank account</string>
+    <string name="paypal">Paypal</string>
 </resources>

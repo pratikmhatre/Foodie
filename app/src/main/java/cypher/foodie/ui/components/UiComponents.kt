@@ -1,10 +1,11 @@
 package cypher.foodie.ui.components
 
-import android.widget.Space
+import android.widget.Toolbar
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,12 +40,45 @@ import cypher.foodie.ui.theme.textTypography
 
 
 @Composable
+fun Toolbar(
+    modifier: Modifier = Modifier,
+    @StringRes title: Int,
+    rightNavButton: @Composable () -> Unit = {},
+    onBackClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = MaterialTheme.spacing.large)
+            .height(60.dp), verticalAlignment = Alignment.CenterVertically
+    ) {
+        ToolbarNavButton(icon = R.drawable.ic_back) { }
+        Text(
+            text = stringResource(title),
+            textAlign = TextAlign.Center,
+            color = Color.Black,
+            fontSize = 18.sp,
+            style = MaterialTheme.textTypography.textSemiBold,
+            modifier = Modifier.weight(1f)
+        )
+        ToolbarNavButton(icon = R.drawable.ic_heart) { }
+    }
+}
+
+@Composable
+fun ToolbarNavButton(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
+    Image(painter = painterResource(icon), contentDescription = "", modifier = modifier.clickable {
+        onClick()
+    })
+}
+
+@Composable
 fun ElevatedCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Card(
         modifier = modifier,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Box(
             Modifier
@@ -56,9 +90,14 @@ fun ElevatedCard(modifier: Modifier = Modifier, content: @Composable () -> Unit)
 }
 
 @Composable
-fun BigButton(modifier: Modifier = Modifier, isPrimaryButton: Boolean = true, text: String, onClick: () -> Unit) {
+fun BigButton(
+    modifier: Modifier = Modifier,
+    isPrimaryButton: Boolean = true,
+    @StringRes text: Int,
+    onClick: () -> Unit
+) {
     Box(
-        modifier = modifier.background(Color.White), contentAlignment = Alignment.Center
+        modifier = modifier, contentAlignment = Alignment.Center
     ) {
         Button(
             modifier = Modifier
@@ -71,7 +110,7 @@ fun BigButton(modifier: Modifier = Modifier, isPrimaryButton: Boolean = true, te
             colors = ButtonDefaults.buttonColors(containerColor = if (isPrimaryButton) MaterialTheme.colorScheme.primary else Color.White)
         ) {
             Text(
-                text = text,
+                text = stringResource(text),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = if (isPrimaryButton) Color.White else MaterialTheme.colorScheme.primary,
@@ -117,17 +156,18 @@ fun ErrorLayout(
             )
             if (shouldShowButton && isPrimaryCTA.not()) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
-                BigButton(text = stringResource(buttonData.text), isPrimaryButton = true) { buttonData.onClick() }
+                BigButton(text = buttonData.text, isPrimaryButton = true) { buttonData.onClick() }
             }
         }
 
         if (shouldShowButton && isPrimaryCTA) {
             BigButton(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                text = stringResource(buttonData.text),
+                text = buttonData.text,
                 isPrimaryButton = true
             ) { buttonData.onClick() }
         }
+
     }
 }
 
@@ -136,8 +176,8 @@ fun ErrorLayout(
 private fun BigButtonPreview(darkTheme: Boolean = false) {
     FoodieTheme {
         Column {
-            BigButton(text = "Complete Order", isPrimaryButton = true) {}
-            BigButton(text = "Complete Order", isPrimaryButton = false) {}
+            BigButton(text = R.string.update_profile, isPrimaryButton = true) {}
+            BigButton(text = R.string.update_profile, isPrimaryButton = false) {}
         }
     }
 }
@@ -173,6 +213,7 @@ private fun ErrorLayoutPrimary() {
         )
     }
 }
+
 @Preview
 @Composable
 private fun ErrorLayoutNonPrimary() {
@@ -187,6 +228,7 @@ private fun ErrorLayoutNonPrimary() {
 
     }
 }
+
 @Preview
 @Composable
 private fun ErrorLayoutNoButton() {
@@ -198,6 +240,14 @@ private fun ErrorLayoutNoButton() {
             subtitle = R.string.error_subtitle_no_network,
             buttonData = ErrorLayoutButton()
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ToolbarPreview() {
+    FoodieTheme {
+        Toolbar(modifier = Modifier.background(Color.White), title = R.string.my_profile, onBackClick = {})
     }
 }
 
