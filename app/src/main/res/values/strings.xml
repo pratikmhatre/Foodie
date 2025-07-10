@@ -15,4 +15,13 @@
     <string name="bank_account">Bank account</string>
     <string name="paypal">Paypal</string>
     <string name="get_started">Get started</string>
+    <string name="email_address">Email address</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="password">Password</string>
+    <string name="enter_password">*********</string>
+    <string name="forgot_passcode">Forgot passcode?</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="enter_full_name">Enter full name</string>
+    <string name="signup">Sign up</string>
 </resources>
