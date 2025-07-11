@@ -2,6 +2,7 @@ package cypher.foodie.ui.components
 
 import android.graphics.text.MeasuredText
 import androidx.annotation.DrawableRes
+import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -60,16 +61,18 @@ import cypher.foodie.ui.theme.textTypography
 fun Toolbar(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    rightNavButton: @Composable () -> Unit = {},
+    @DrawableRes rightNavIcon: Int? = 0,
+    rightNavAction: (() -> Unit)? = null,
     onBackClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.large)
             .height(60.dp), verticalAlignment = Alignment.CenterVertically
     ) {
-        ToolbarNavButton(icon = R.drawable.ic_back) { }
+        IconButton(onClick = onBackClick) {
+            Icon(painter = painterResource(R.drawable.ic_back), contentDescription = "back_button")
+        }
         Text(
             text = stringResource(title),
             textAlign = TextAlign.Center,
@@ -78,15 +81,52 @@ fun Toolbar(
             style = MaterialTheme.textTypography.textSemiBold,
             modifier = Modifier.weight(1f)
         )
-        ToolbarNavButton(icon = R.drawable.ic_heart) { }
+        rightNavIcon?.run {
+            IconButton(onClick = { rightNavAction?.invoke() }) {
+                Icon(painter = painterResource(rightNavIcon), contentDescription = "right_action")
+            }
+        }
     }
 }
 
 @Composable
-fun ToolbarNavButton(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
-    Image(painter = painterResource(icon), contentDescription = "", modifier = modifier.clickable {
-        onClick()
-    })
+fun ProfileCard(modifier: Modifier = Modifier) {
+    ElevatedCard {
+        Row(verticalAlignment = Alignment.Top, modifier = modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(R.drawable.img_profile_avatar),
+                modifier = Modifier.size(60.dp),
+                contentDescription = "Profile Avatar"
+            )
+            Spacer(Modifier.width(MaterialTheme.spacing.medium))
+            Column(modifier = Modifier) {
+                Text(
+                    text = stringResource(R.string.users_name),
+                    style = MaterialTheme.textTypography.textSemiBold,
+                    fontSize = 17.sp
+                )
+                Spacer(Modifier.height(MaterialTheme.spacing.small))
+                Text(
+                    text = stringResource(R.string.users_email),
+                    style = MaterialTheme.textTypography.textRegular,
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                )
+                Spacer(Modifier.height(MaterialTheme.spacing.small))
+                Text(
+                    text = stringResource(R.string.users_phone),
+                    style = MaterialTheme.textTypography.textRegular,
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                )
+                Spacer(Modifier.height(MaterialTheme.spacing.small))
+                Text(
+                    text = stringResource(R.string.users_address),
+                    style = MaterialTheme.textTypography.textRegular,
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                )
+
+            }
+        }
+    }
 }
 
 @Composable
@@ -295,6 +335,7 @@ data class TabItem(val defaultIcon: ImageVector, val selectedIcon: ImageVector) 
 }
 
 
+/*
 @Preview
 @Composable
 private fun MenuListItemPreview() {
@@ -310,17 +351,23 @@ private fun MenuListItemPreview() {
         }
     }
 }
+*/
 
-/*
+
 @Preview
 @Composable
 private fun ToolbarPreview() {
     FoodieTheme {
-        Toolbar(modifier = Modifier.background(Color.White), title = R.string.my_profile, onBackClick = {})
+        Toolbar(
+            modifier = Modifier.background(Color.White),
+            title = R.string.my_profile,
+            onBackClick = {},
+            rightNavIcon = R.drawable.ic_heart,
+            rightNavAction = {})
     }
 }
 
-
+/*
 @Preview
 @Composable
 private fun BigButtonPreview(darkTheme: Boolean = false) {

@@ -38,7 +38,7 @@ import cypher.foodie.ui.theme.textTypography
 fun ProfileScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier, containerColor = MaterialTheme.colorScheme.background,
-        topBar = { Toolbar(modifier = Modifier, title = R.string.my_profile) { } }, bottomBar = {
+        topBar = { Toolbar(modifier = Modifier, title = R.string.my_profile, rightNavIcon = null) { } }, bottomBar = {
             BigButton(text = R.string.update_profile, isPrimaryButton = true) {
 
             }

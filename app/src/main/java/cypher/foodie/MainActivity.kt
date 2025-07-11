@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import cypher.foodie.ui.screens.CartScreen
 import cypher.foodie.ui.screens.DashboardScreen
 import cypher.foodie.ui.screens.OnboardingScreen
 import cypher.foodie.ui.screens.WishlistScreen
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodieTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    WishlistScreen(modifier = Modifier.padding(innerPadding))
+                    CartScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -37,7 +38,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
-    MaterialTheme.shapes.medium
 }
 
 @Preview(showBackground = true)

@@ -44,5 +44,25 @@
     <string name="price_2">$18.99/-</string>
     <string name="price_3">$11.99/-</string>
     <string name="price_4">$24.99/-</string>
+    <string name="blank"></string>
+
+    <string name="delivery_info">Delivery info</string>
+    <string name="return_policy">Return policy</string>
+
+    <string name="delivery_info_details">Free delivery available within 5km circle of the cafe. Please allow extra time in case of bad road and weather condition.</string>
+    <string name="return_policy_details">All our food is checked before leaving our stores so in any case you find a broken food container please contact our hotline immediately</string>
+
+
+    <string name="add_to_cart">Add to cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="cart">Cart</string>
+    <string name="swipe_to_delete">Swipe the item to delete</string>
+    <string name="personal_details">Personal details</string>
+    <string name="change">change</string>
+    <string name="users_phone">+61 490341086</string>
+    <string name="orders">Orders</string>
+    <string name="faq">Faq</string>
+    <string name="settings">Settings</string>
+    <string name="rating_n_review">Rating Us</string>
 
 </resources>
