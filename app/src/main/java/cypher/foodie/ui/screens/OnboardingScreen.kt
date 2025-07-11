@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,7 +54,7 @@ import cypher.foodie.ui.theme.textTypography
 data class TabItem(val title: String, val isSelected: Boolean)
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun OnboardingScreen(modifier: Modifier = Modifier) {
     val tabs = listOf(
         TabItem(title = stringResource(R.string.login), isSelected = true),
         TabItem(title = stringResource(R.string.signup), isSelected = false)
@@ -63,8 +62,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
 
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (pagerState.isScrollInProgress.not()) selectedTab = pagerState.currentPage
+    }
+
     LaunchedEffect(selectedTab) {
-        pagerState.scrollToPage(selectedTab)
+        pagerState.animateScrollToPage(selectedTab)
     }
 
     Box(
@@ -154,13 +157,12 @@ fun SignupFrame(modifier: Modifier = Modifier) {
     var emailAddress by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.SpaceBetween
+            .background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center
     ) {
-        Column(Modifier.padding(MaterialTheme.spacing.extraLarge)) {
+        Column(Modifier.padding(MaterialTheme.spacing.extraLarge), verticalArrangement = Arrangement.Center ) {
             FormInput(
                 modifier = Modifier,
                 label = R.string.name,
@@ -183,7 +185,7 @@ fun SignupFrame(modifier: Modifier = Modifier) {
                 isPassword = true,
                 onTextChanged = { password = it })
         }
-        BigButton(isPrimaryButton = true, text = R.string.signup) { }
+        BigButton(isPrimaryButton = true, text = R.string.signup, modifier = Modifier.align(Alignment.BottomCenter)) { }
     }
 }
 
@@ -280,6 +282,6 @@ private fun SignupFramePreview() {
 @Composable
 private fun LoginScreenPreview() {
     FoodieTheme {
-        LoginScreen()
+        OnboardingScreen()
     }
 }
