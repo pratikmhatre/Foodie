@@ -1,30 +1,46 @@
 package cypher.foodie.ui.components
 
-import android.widget.Toolbar
+import android.graphics.text.MeasuredText
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import cypher.foodie.R
 import cypher.foodie.ui.components.models.ErrorLayoutButton
 import cypher.foodie.ui.theme.FoodieTheme
+import cypher.foodie.ui.theme.roundedTypography
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
 
@@ -171,6 +188,133 @@ fun ErrorLayout(
     }
 }
 
+@Composable
+fun MenuListItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    price: String,
+    @DrawableRes image: Int,
+    onClick: () -> Unit
+) {
+    Box(modifier = modifier.clickable { onClick() }, contentAlignment = Alignment.TopCenter) {
+        Card(
+            modifier = Modifier
+                .width(210.dp)
+                .height(270.dp)
+                .padding(top = 40.dp),
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.spacing.medium)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.extraLarge)
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Text(
+                    text = title, textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = 22.sp,
+                    style = MaterialTheme.roundedTypography.roundedSemiBold
+                )
+                Spacer(Modifier.height(MaterialTheme.spacing.large))
+                Text(
+                    text = price,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 17.sp,
+                    style = MaterialTheme.roundedTypography.roundedBold
+                )
+            }
+        }
+        Image(
+            painter = painterResource(image), contentDescription = null, modifier = Modifier
+                .size(120.dp)
+                .clip(
+                    CircleShape
+                )
+        )
+    }
+}
+
+
+@Composable
+fun FoodieBottomNavigation(modifier: Modifier = Modifier, selectedIndex: Int, onClick: (Int) -> Unit) {
+    val tabItems = listOf(
+        TabItem(Icons.Outlined.Home, Icons.Filled.Home),
+        TabItem(Icons.Outlined.FavoriteBorder, Icons.Outlined.FavoriteBorder),
+        TabItem(Icons.Outlined.Person, Icons.Outlined.Person),
+        TabItem(Icons.Outlined.Refresh, Icons.Outlined.Refresh)
+    )
+    BottomAppBar(
+        modifier = modifier
+            .fillMaxWidth(), containerColor = Color.Transparent
+    ) {
+        tabItems.forEachIndexed { index, item ->
+            val isSelected = index == selectedIndex
+            IconButton(onClick = { onClick(index) }, modifier = Modifier.weight(1f)) {
+                Icon(
+                    imageVector = item.getIcon(isSelected),
+                    contentDescription = "BottomNav",
+                    tint = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .shadow(
+                            elevation = if (isSelected) 0.dp else 0.dp,
+                            shape = CircleShape,
+                            clip = true,
+                            spotColor = MaterialTheme.colorScheme.primary
+                        )
+                )
+            }
+        }
+    }
+}
+
+/*
+@Preview
+@Composable
+private fun FoodieBottomNavPreview() {
+    FoodieTheme {
+        FoodieBottomNavigation(selectedIndex = 0, onClick = {})
+    }
+}
+*/
+
+data class TabItem(val defaultIcon: ImageVector, val selectedIcon: ImageVector) {
+    fun getIcon(isSelected: Boolean): ImageVector {
+        return if (isSelected) selectedIcon else defaultIcon
+    }
+}
+
+
+@Preview
+@Composable
+private fun MenuListItemPreview() {
+    FoodieTheme {
+        Box(modifier = Modifier.background(Color.White)) {
+            MenuListItem(
+                modifier = Modifier.padding(all = MaterialTheme.spacing.extraLarge),
+                title = "Pad Thai Noodles Mix",
+                price = "$15.99/-",
+                image = R.drawable.img_fried_chicken_mix
+            ) { }
+
+        }
+    }
+}
+
+/*
+@Preview
+@Composable
+private fun ToolbarPreview() {
+    FoodieTheme {
+        Toolbar(modifier = Modifier.background(Color.White), title = R.string.my_profile, onBackClick = {})
+    }
+}
+
+
 @Preview
 @Composable
 private fun BigButtonPreview(darkTheme: Boolean = false) {
@@ -242,13 +386,7 @@ private fun ErrorLayoutNoButton() {
         )
     }
 }
+*/
 
-@Preview
-@Composable
-private fun ToolbarPreview() {
-    FoodieTheme {
-        Toolbar(modifier = Modifier.background(Color.White), title = R.string.my_profile, onBackClick = {})
-    }
-}
 
 

@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import cypher.foodie.ui.screens.DashboardScreen
 import cypher.foodie.ui.screens.OnboardingScreen
 import cypher.foodie.ui.theme.FoodieTheme
 
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodieTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    OnboardingScreen(modifier = Modifier.padding(innerPadding))
+                    DashboardScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

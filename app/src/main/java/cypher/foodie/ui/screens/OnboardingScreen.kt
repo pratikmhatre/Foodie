@@ -51,13 +51,13 @@ import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
 
-data class TabItem(val title: String, val isSelected: Boolean)
+data class TabItem(val title: String)
 
 @Composable
 fun OnboardingScreen(modifier: Modifier = Modifier) {
     val tabs = listOf(
-        TabItem(title = stringResource(R.string.login), isSelected = true),
-        TabItem(title = stringResource(R.string.signup), isSelected = false)
+        TabItem(title = stringResource(R.string.login)),
+        TabItem(title = stringResource(R.string.signup))
     )
     var selectedTab by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
@@ -103,7 +103,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.align(Alignment.BottomCenter), divider = {},
                 ) {
                     tabs.forEachIndexed { index, tab ->
-                        Tab(selected = tab.isSelected, text = { Text(tab.title, style = MaterialTheme.textTypography.textSemiBold, fontSize = 18.sp, color = Color.Black) }, onClick = {
+                        Tab(selected = selectedTab == index, text = { Text(tab.title, style = MaterialTheme.textTypography.textSemiBold, fontSize = 18.sp, color = Color.Black) }, onClick = {
                             selectedTab = index
                         })
                     }

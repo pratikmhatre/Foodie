@@ -24,4 +24,25 @@
     <string name="name">Name</string>
     <string name="enter_full_name">Enter full name</string>
     <string name="signup">Sign up</string>
+    <string name="delicious_food_for_you">Delicious\nfood for you</string>
+    <string name="search_food_menu">Search food menu</string>
+
+    <!--food menu-->
+    <string name="food_entries">Entries</string>
+    <string name="food_main_course">Main Course</string>
+    <string name="food_on_tap">On Tap</string>
+    <string name="food_break">Bread</string>
+    <string name="food_desserts">Desserts</string>
+
+
+    <string name="item_name_egg_cucumber">Egg Cucumber Salad</string>
+    <string name="item_name_fried_chicken">Fried Chicken Mix</string>
+    <string name="item_name_moi_koi">Moi-moi Noodles</string>
+    <string name="item_name_veggie_mix">Veggie Tomato Mix</string>
+
+    <string name="price_1">$14.99/-</string>
+    <string name="price_2">$18.99/-</string>
+    <string name="price_3">$11.99/-</string>
+    <string name="price_4">$24.99/-</string>
+
 </resources>
