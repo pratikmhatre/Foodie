@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.ui.components.AppConstants
 import cypher.foodie.ui.components.FoodieBottomNavigation
 import cypher.foodie.ui.components.MenuListItem
 import cypher.foodie.ui.theme.FoodieTheme
@@ -64,15 +65,6 @@ private val tabs = listOf(
     R.string.food_on_tap,
     R.string.food_break,
     R.string.food_desserts
-)
-
-data class MenuItem(@StringRes val title: Int, @StringRes val price: Int, @DrawableRes val image: Int)
-
-private val menuList = listOf(
-    MenuItem(R.string.item_name_fried_chicken, R.string.price_1, R.drawable.img_fried_chicken_mix),
-    MenuItem(R.string.item_name_moi_koi, R.string.price_1, R.drawable.img_moi_koi),
-    MenuItem(R.string.item_name_veggie_mix, R.string.price_1, R.drawable.img_veggie_tomato_mix),
-    MenuItem(R.string.item_name_egg_cucumber, R.string.price_1, R.drawable.img_egg_cucumber),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -222,8 +214,8 @@ fun DashboardMenuList(modifier: Modifier = Modifier) {
         ), contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.extraLarge)
     ) {
         items(count = 10) { index ->
-            val food = menuList.random()
-            MenuListItem(title = stringResource(food.title), price = stringResource(food.price), image = food.image) { }
+            val food = AppConstants.menuList.random()
+            MenuListItem(title = food.title, price = food.price, image = food.image) { }
         }
     }
 }

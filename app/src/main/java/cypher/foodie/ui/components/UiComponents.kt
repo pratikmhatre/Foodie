@@ -191,18 +191,24 @@ fun ErrorLayout(
 @Composable
 fun MenuListItem(
     modifier: Modifier = Modifier,
-    title: String,
-    price: String,
+    applyPadding: Boolean = false,
+    @StringRes title: Int,
+    @StringRes price: Int,
     @DrawableRes image: Int,
     onClick: () -> Unit
 ) {
-    Box(modifier = modifier.clickable { onClick() }, contentAlignment = Alignment.TopCenter) {
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+            .padding(top = if (applyPadding) MaterialTheme.spacing.extraLarge else 0.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
         Card(
             modifier = Modifier
                 .width(210.dp)
                 .height(270.dp)
                 .padding(top = 40.dp),
-            shape = MaterialTheme.shapes.medium,
+            shape = MaterialTheme.shapes.extraLarge,
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.spacing.medium)
         ) {
@@ -214,14 +220,14 @@ fun MenuListItem(
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Text(
-                    text = title, textAlign = TextAlign.Center,
+                    text = stringResource(title), textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 22.sp,
                     style = MaterialTheme.roundedTypography.roundedSemiBold
                 )
                 Spacer(Modifier.height(MaterialTheme.spacing.large))
                 Text(
-                    text = price,
+                    text = stringResource(price),
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 17.sp,
                     style = MaterialTheme.roundedTypography.roundedBold
@@ -296,8 +302,8 @@ private fun MenuListItemPreview() {
         Box(modifier = Modifier.background(Color.White)) {
             MenuListItem(
                 modifier = Modifier.padding(all = MaterialTheme.spacing.extraLarge),
-                title = "Pad Thai Noodles Mix",
-                price = "$15.99/-",
+                title = R.string.item_name_moi_koi,
+                price = R.string.price_1,
                 image = R.drawable.img_fried_chicken_mix
             ) { }
 
