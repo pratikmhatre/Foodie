@@ -41,7 +41,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier, onGetStartedClicked: () -> Unit
             Column(Modifier.padding(MaterialTheme.spacing.xxLarge)) {
                 Box(
                     modifier = Modifier
-                        .background(Color.White, shape = CircleShape)
+                        .background(MaterialTheme.colorScheme.inverseOnSurface, shape = CircleShape)
                         .size(75.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -55,7 +55,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier, onGetStartedClicked: () -> Unit
                 Text(
                     text = "Food for\nEveryone",
                     style = MaterialTheme.roundedTypography.roundedHeavy,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.inverseOnSurface
                 )
             }
             Box(

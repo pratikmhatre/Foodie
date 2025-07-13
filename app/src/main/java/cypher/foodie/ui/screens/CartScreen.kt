@@ -1,7 +1,5 @@
 package cypher.foodie.ui.screens
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,49 +50,72 @@ import cypher.foodie.ui.theme.roundedTypography
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(modifier: Modifier = Modifier) {
     var cartListData by rememberSaveable { mutableStateOf(cartList) }
 
-    Column(
+    Scaffold(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Toolbar(
-            modifier = Modifier,
-            title = R.string.cart,
-            rightNavIcon = R.drawable.ic_heart,
-            rightNavAction = { AppNavigator.navigateTo(Screen.WishListScreen()) },
-            onBackClick = { AppNavigator.goBack() })
-        Text(
-            text = stringResource(R.string.swipe_to_delete),
-            style = MaterialTheme.textTypography.textRegular,
-            fontSize = 10.sp, modifier = Modifier.padding(vertical = MaterialTheme.spacing.large)
-        )
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.extraLarge),
-            verticalArrangement = Arrangement.spacedBy(
-                MaterialTheme.spacing.large
+            .fillMaxSize(),
+        topBar = {
+            Toolbar(
+                title = R.string.cart,
+                rightNavIcon = R.drawable.ic_heart,
+                rightNavAction = { AppNavigator.navigateTo(Screen.WishListScreen()) }, subTitle = R.string.swipe_to_refresh,
+                onBackClick = { AppNavigator.goBack() }
             )
-        ) {
-            items(cartListData) { cartItem ->
-                CartItem(modifier = Modifier, cartItemData = cartItem, onQuantityChanged = { isAdding ->
-                    if (isAdding) {
-                        cartListData = cartListData.map {
-                            if (it.title == cartItem.title) {
-                                it.copy(quantity = it.quantity + 1)
-                            } else {
-                                it
-                            }
-                        }.filter { it.quantity > 0 }
-                    }
-                })
+        }, bottomBar = {
+            BigButton(
+                text = R.string.checkout,
+                modifier = Modifier
+            ) {
+                AppNavigator.navigateTo(Screen.CheckoutScreen)
             }
         }
-        BigButton(text = R.string.checkout) {
-            AppNavigator.navigateTo(Screen.CheckoutScreen)
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding).padding(top = MaterialTheme.spacing.extraLarge),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = MaterialTheme.spacing.extraLarge),
+                verticalArrangement = Arrangement.spacedBy(
+                    MaterialTheme.spacing.large
+                )
+            ) {
+                items(cartListData) { cartItem ->
+                    CartItem(
+                        modifier = Modifier,
+                        cartItemData = cartItem,
+                        onQuantityChanged = { isAdding ->
+
+                            if (isAdding) {
+                                cartListData = cartListData.map {
+                                    if (it.title == cartItem.title) {
+                                        it.copy(quantity = it.quantity + 1)
+                                    } else {
+                                        it
+                                    }
+                                }
+                            } else {
+                                cartListData = cartListData.map {
+                                    if (it.title == cartItem.title) {
+                                        it.copy(quantity = it.quantity - 1)
+                                    } else {
+                                        it
+                                    }
+                                }.filter { it.quantity > 0 }
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -115,32 +137,31 @@ fun CartItem(modifier: Modifier = Modifier, cartItemData: CartItemData, onQuanti
                 painter = painterResource(cartItemData.image)
             )
             Spacer(Modifier.width(MaterialTheme.spacing.large))
-            Box(contentAlignment = Alignment.CenterStart) {
+            Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.weight(1f)) {
                 Column {
                     Text(
                         text = stringResource(cartItemData.title),
                         style = MaterialTheme.roundedTypography.roundedSemiBold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier, fontSize = 16.sp
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 16.sp
                     )
                     Spacer(Modifier.height(MaterialTheme.spacing.small))
                     Text(
                         text = stringResource(cartItemData.price),
                         style = MaterialTheme.roundedTypography.roundedSemiBold,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier, fontSize = 14.sp
+                        fontSize = 14.sp
                     )
                 }
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd) {
-                    Counter(
-                        Modifier,
-                        value = cartItemData.quantity.toString(),
-                        onAdd = { onQuantityChanged(true) },
-                        onRemove = {
-                            onQuantityChanged(false)
-                        })
-                }
             }
+            Counter(
+                Modifier,
+                value = cartItemData.quantity.toString(),
+                onAdd = { onQuantityChanged(true) },
+                onRemove = {
+                    onQuantityChanged(false)
+                }
+            )
         }
     }
 }
@@ -154,28 +175,28 @@ fun Counter(modifier: Modifier = Modifier, value: String, onAdd: () -> Unit, onR
             .clip(MaterialTheme.shapes.large)
             .padding(horizontal = MaterialTheme.spacing.extraSmall),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
     ) {
         Icon(
             modifier = Modifier
                 .size(18.dp)
                 .clickable { onRemove() },
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.inverseOnSurface,
             painter = painterResource(R.drawable.ic_remove),
-            contentDescription = ""
+            contentDescription = stringResource(R.string.remove_item)
         )
         Text(
             text = value,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.inverseOnSurface,
             style = MaterialTheme.roundedTypography.roundedSemiBold,
             fontSize = 13.sp
         )
         Icon(
-            painter = painterResource(R.drawable.ic_add), contentDescription = "",
+            painter = painterResource(R.drawable.ic_add), contentDescription = stringResource(R.string.add_item),
             modifier = Modifier
                 .size(16.dp)
                 .clickable { onAdd() },
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.inverseOnSurface,
         )
     }
 }

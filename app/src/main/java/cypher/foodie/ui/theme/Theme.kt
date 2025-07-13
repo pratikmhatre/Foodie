@@ -19,8 +19,10 @@ private val DarkColorScheme = darkColorScheme(
     primary = ThemeOrange,
     secondary = ThemeCrimson,
     tertiary = Pink40,
-    background = BGGray,
-    onSurface = Color.Black
+    background = BGGrayDark,
+    onSurface = Color.White,
+    inverseOnSurface = Color.Black,
+    onSurfaceVariant = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -28,7 +30,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = ThemeCrimson,
     tertiary = Pink40,
     background = BGGray,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+    inverseOnSurface = Color.White,
+    onSurfaceVariant = Color.Black.copy(alpha = 0.5f)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

@@ -30,22 +30,27 @@ fun MainTabsScreen(modifier: Modifier = Modifier) {
     var bottomNavPosition by rememberSaveable { mutableIntStateOf(0) }
     var pagerState = rememberPagerState(initialPage = 0, pageCount = { navBarTabs.size })
     LaunchedEffect(bottomNavPosition) { pagerState.animateScrollToPage(bottomNavPosition) }
-    Column(modifier = modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background), verticalArrangement = Arrangement.Bottom) {
-        HorizontalPager(
-            modifier = Modifier.weight(1f)
-                .fillMaxSize(), state = pagerState
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Box(modifier = Modifier) {
-                GetScreenByPosition(it)
+            HorizontalPager(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(), state = pagerState, userScrollEnabled = false
+            ) {
+                Box(modifier = Modifier) {
+                    GetScreenByPosition(it)
+                }
             }
+            FoodieBottomNavigation(
+                modifier = Modifier,
+                selectedIndex = bottomNavPosition,
+                onClick = { bottomNavPosition = it })
         }
-        FoodieBottomNavigation(
-            modifier = Modifier,
-            selectedIndex = bottomNavPosition,
-            onClick = { bottomNavPosition = it })
-    }
+
 }
 
 @Composable

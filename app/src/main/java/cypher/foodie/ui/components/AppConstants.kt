@@ -60,15 +60,15 @@ object AppConstants {
             quantity = 4
         ),
         CartItemData(
-            title = R.string.item_name_moi_koi,
-            price = R.string.price_1,
-            image = R.drawable.img_moi_koi,
+            title = R.string.item_name_egg_cucumber,
+            price = R.string.price_3,
+            image = R.drawable.img_egg_cucumber,
             quantity = 2
         ),
         CartItemData(
-            title = R.string.item_name_moi_koi,
-            price = R.string.price_1,
-            image = R.drawable.img_moi_koi,
+            title = R.string.item_name_fried_chicken,
+            price = R.string.price_4,
+            image = R.drawable.img_fried_chicken_mix,
             quantity = 6
         ),
     )

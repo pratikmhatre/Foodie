@@ -62,8 +62,8 @@ fun ProductDetailsScreen(modifier: Modifier = Modifier, productDetails: FoodMenu
             modifier = Modifier,
             title = R.string.blank,
             onBackClick = { AppNavigator.goBack() },
-            rightNavIcon = R.drawable.ic_heart,
-            rightNavAction = { AppNavigator.navigateTo(Screen.WishListScreen()) })
+            rightNavIcon = R.drawable.ic_cart,
+            rightNavAction = { AppNavigator.navigateTo(Screen.CartScreen) })
     }, bottomBar = {
         BigButton(text = R.string.add_to_cart) { }
     }) { padding ->
@@ -77,7 +77,7 @@ fun ProductDetailsScreen(modifier: Modifier = Modifier, productDetails: FoodMenu
                     PagerImageItem(modifier = Modifier, image = images[index])
                 }
                 Row(
-                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.large),
+                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
                 ) {
                     images.forEachIndexed { index, _ ->
@@ -97,7 +97,7 @@ fun ProductDetailsScreen(modifier: Modifier = Modifier, productDetails: FoodMenu
             Text(
                 text = stringResource(productDetails.title),
                 style = MaterialTheme.roundedTypography.roundedSemiBold,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier, fontSize = 28.sp
             )
             Spacer(Modifier.height(MaterialTheme.spacing.small))
@@ -132,14 +132,14 @@ fun DescriptionText(modifier: Modifier = Modifier, title: Int, description: Int)
         Text(
             text = stringResource(title),
             style = MaterialTheme.roundedTypography.roundedSemiBold,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier, fontSize = 16.sp
         )
         Spacer(Modifier.height(MaterialTheme.spacing.small))
         Text(
             text = stringResource(description),
             style = MaterialTheme.textTypography.textRegular,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             modifier = Modifier, fontSize = 14.sp
         )
     }
@@ -150,8 +150,7 @@ fun PagerImageItem(modifier: Modifier = Modifier, @DrawableRes image: Int) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(270.dp)
-            .background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center
+            .height(250.dp), contentAlignment = Alignment.Center
     ) {
         Image(painter = painterResource(image), contentDescription = "image", modifier = Modifier.size(180.dp).clip(CircleShape))
     }

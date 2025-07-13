@@ -40,10 +40,10 @@
     <string name="item_name_moi_koi">Moi-moi Noodles</string>
     <string name="item_name_veggie_mix">Veggie Tomato Mix</string>
 
-    <string name="price_1">$14.99/-</string>
-    <string name="price_2">$18.99/-</string>
-    <string name="price_3">$11.99/-</string>
-    <string name="price_4">$24.99/-</string>
+    <string name="price_1">$14.99</string>
+    <string name="price_2">$18.99</string>
+    <string name="price_3">$11.99</string>
+    <string name="price_4">$24.99</string>
     <string name="blank"></string>
 
     <string name="delivery_info">Delivery info</string>
@@ -56,7 +56,7 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="checkout">Checkout</string>
     <string name="cart">Cart</string>
-    <string name="swipe_to_delete">Swipe the item to delete</string>
+    <string name="swipe_to_refresh">Swipe the refresh the cart</string>
     <string name="personal_details">Personal details</string>
     <string name="change">change</string>
     <string name="users_phone">+61 490341086</string>
@@ -78,4 +78,6 @@
     <string name="offers_and_coupons"><![CDATA[Offers & Coupons]]></string>
     <string name="error_no_offers">No offers available</string>
     <string name="error_no_offers_description"><![CDATA[Seems like you don\'t have any active offers & promotions available at the moment]]></string>
+    <string name="remove_item">Remove item</string>
+    <string name="add_item">Add item</string>
 </resources>

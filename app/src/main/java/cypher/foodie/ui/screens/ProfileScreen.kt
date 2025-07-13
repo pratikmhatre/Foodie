@@ -160,7 +160,7 @@ fun PaymentItem(
                     .fillMaxWidth()
                     .height(0.2.dp)
                     .padding(start = 50.dp)
-                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
+                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             )
         }
     }

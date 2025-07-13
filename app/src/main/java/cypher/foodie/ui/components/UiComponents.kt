@@ -59,6 +59,7 @@ fun Toolbar(
     modifier: Modifier = Modifier,
     @DrawableRes leftNavIcon: Int? = null,
     @StringRes title: Int,
+    @StringRes subTitle: Int? = null,
     @DrawableRes rightNavIcon: Int? = null,
     rightNavAction: (() -> Unit)? = null,
     showNavIcons: Boolean = true,
@@ -67,14 +68,26 @@ fun Toolbar(
     Column {
         TopAppBar(
             title = {
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(
+                    Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Text(
                         text = stringResource(title),
                         textAlign = TextAlign.Center,
                         color = Color.Black,
-                        fontSize = 18.sp,
+                        fontSize = 20.sp,
                         style = MaterialTheme.textTypography.textSemiBold
                     )
+                    subTitle?.run {
+                        Text(
+                            text = stringResource(subTitle),
+                            style = MaterialTheme.textTypography.textRegular,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmall)
+                        )
+                    }
 
                 }
             },
@@ -88,7 +101,8 @@ fun Toolbar(
                         )
                     }
                 }
-            }, actions = {
+            },
+            actions = {
                 if (showNavIcons) {
                     rightNavIcon?.let { it ->
                         IconButton(onClick = { rightNavAction?.invoke() }) {
@@ -106,45 +120,6 @@ fun Toolbar(
     }
 }
 
-@Composable
-fun ProfileCard(modifier: Modifier = Modifier) {
-    ElevatedCardView {
-        Row(verticalAlignment = Alignment.Top, modifier = modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(R.drawable.img_profile_avatar),
-                modifier = Modifier.size(60.dp),
-                contentDescription = "Profile Avatar"
-            )
-            Spacer(Modifier.width(MaterialTheme.spacing.medium))
-            Column(modifier = Modifier) {
-                Text(
-                    text = stringResource(R.string.users_name),
-                    style = MaterialTheme.textTypography.textSemiBold,
-                    fontSize = 17.sp
-                )
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    text = stringResource(R.string.users_email),
-                    style = MaterialTheme.textTypography.textRegular,
-                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-                )
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    text = stringResource(R.string.users_phone),
-                    style = MaterialTheme.textTypography.textRegular,
-                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-                )
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    text = stringResource(R.string.users_address),
-                    style = MaterialTheme.textTypography.textRegular,
-                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-                )
-
-            }
-        }
-    }
-}
 
 @Composable
 fun SmallSpacer(modifier: Modifier = Modifier) {
@@ -176,7 +151,7 @@ fun ElevatedCardView(modifier: Modifier = Modifier, content: @Composable () -> U
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Box(
@@ -206,13 +181,13 @@ fun BigButton(
                 .background(Color.Transparent),
             onClick = onClick,
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = if (isPrimaryButton) MaterialTheme.colorScheme.primary else Color.White)
+            colors = ButtonDefaults.buttonColors(containerColor = if (isPrimaryButton) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.inverseOnSurface)
         ) {
             Text(
                 text = stringResource(text),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = if (isPrimaryButton) Color.White else MaterialTheme.colorScheme.primary,
+                color = if (isPrimaryButton) MaterialTheme.colorScheme.inverseOnSurface else MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.textTypography.textSemiBold
             )
         }
@@ -251,13 +226,17 @@ fun ErrorLayout(
             Text(
                 text = stringResource(title),
                 style = MaterialTheme.textTypography.textSemiBold,
-                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onBackground
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             Text(
                 text = stringResource(subtitle),
                 style = MaterialTheme.textTypography.textRegular,
-                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.57f)
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.57f)
             )
             if (shouldShowButton && isPrimaryCTA.not()) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
@@ -297,7 +276,7 @@ fun MenuListItem(
                 .height(270.dp)
                 .padding(top = 40.dp),
             shape = MaterialTheme.shapes.extraLarge,
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
             elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.spacing.medium)
         ) {
             Column(
@@ -309,7 +288,7 @@ fun MenuListItem(
             ) {
                 Text(
                     text = stringResource(title), textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 22.sp,
                     style = MaterialTheme.roundedTypography.roundedSemiBold
                 )
@@ -383,7 +362,7 @@ data class TabItem(val defaultIcon: ImageVector, val selectedIcon: ImageVector) 
 @Composable
 private fun MenuListItemPreview() {
     FoodieTheme {
-        Box(modifier = Modifier.background(Color.White)) {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface)) {
             MenuListItem(
                 modifier = Modifier.padding(all = MaterialTheme.spacing.extraLarge),
                 title = R.string.item_name_moi_koi,
@@ -401,12 +380,11 @@ private fun MenuListItemPreview() {
 @Composable
 private fun ToolbarPreview() {
     FoodieTheme {
-        ErrorLayout(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
-            title = R.string.error_no_orders,
-            subtitle = R.string.error_no_orders_description
+        Toolbar(
+            title = R.string.app_name,
+            onBackClick = {},
+            modifier = Modifier.background(MaterialTheme.colorScheme.background), rightNavIcon = R.drawable.ic_heart
         )
-
     }
 }
 
@@ -430,7 +408,7 @@ private fun ElevatedCardPreview() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.inverseOnSurface)
         ) {
             ElevatedCard(
                 Modifier.padding(MaterialTheme.spacing.medium)
@@ -445,7 +423,7 @@ private fun ElevatedCardPreview() {
 private fun ErrorLayoutPrimary() {
     FoodieTheme {
         ErrorLayout(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface),
             image = R.drawable.error_no_connection,
             title = R.string.error_title_no_network,
             subtitle = R.string.error_subtitle_no_network,
@@ -459,7 +437,7 @@ private fun ErrorLayoutPrimary() {
 private fun ErrorLayoutNonPrimary() {
     FoodieTheme {
         ErrorLayout(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface),
             image = R.drawable.error_no_connection,
             title = R.string.error_title_no_network,
             subtitle = R.string.error_subtitle_no_network,
@@ -474,7 +452,7 @@ private fun ErrorLayoutNonPrimary() {
 private fun ErrorLayoutNoButton() {
     FoodieTheme {
         ErrorLayout(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.inverseOnSurface),
             image = R.drawable.error_no_connection,
             title = R.string.error_title_no_network,
             subtitle = R.string.error_subtitle_no_network,

@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.di.AppNavigator
 import cypher.foodie.ui.components.BigButton
 import cypher.foodie.ui.components.ElevatedCardView
 import cypher.foodie.ui.components.ExtraLargeSpacer
@@ -55,7 +56,7 @@ fun CheckoutScreen(modifier: Modifier = Modifier) {
         Toolbar(
             modifier = Modifier,
             title = R.string.checkout,
-            onBackClick = {})
+            onBackClick = { AppNavigator.goBack() })
     }, bottomBar = {
         BigButton(text = R.string.continue_to_pay) { }
     }) { padding ->
@@ -106,14 +107,14 @@ fun ProfileSection(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                         .background(
-                            MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                 )
                 ExtraLargeSpacer()
                 Text(
                     text = stringResource(R.string.users_phone),
                     style = MaterialTheme.textTypography.textRegular,
-                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface
                 )
                 HorizontalDivider(
                     Modifier
@@ -121,14 +122,14 @@ fun ProfileSection(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                         .background(
-                            MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                         )
                 )
                 ExtraLargeSpacer()
                 Text(
                     text = stringResource(R.string.users_address),
                     style = MaterialTheme.textTypography.textRegular,
-                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onBackground
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface
                 )
 
             }
@@ -144,7 +145,7 @@ private fun showAddressDialog() {
 fun AddressDialog(modifier: Modifier = Modifier) {
     Card(
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.extraLarge)
@@ -175,7 +176,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                     "Delivery to David Parker".uppercase(),
                     style = MaterialTheme.textTypography.textMedium,
                     fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
                 SmallSpacer()
                 Row {
@@ -183,7 +184,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                         "3.5km",
                         style = MaterialTheme.textTypography.textRegular,
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.width(MaterialTheme.spacing.medium))
                     Text(
@@ -205,7 +206,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                         end = MaterialTheme.spacing.extraLarge
                     )
                     .background(
-                        MaterialTheme.colorScheme.onBackground
+                        MaterialTheme.colorScheme.onSurface
                     )
             )
 
@@ -216,7 +217,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                     "Delivery to David Parker".uppercase(),
                     style = MaterialTheme.textTypography.textMedium,
                     fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
                 SmallSpacer()
                 Row {
@@ -224,7 +225,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                         "1km",
                         style = MaterialTheme.textTypography.textRegular,
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.width(MaterialTheme.spacing.medium))
                     Text(
@@ -264,7 +265,7 @@ fun AddressDialog(modifier: Modifier = Modifier) {
                     text = stringResource(R.string.proceed),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.inverseOnSurface,
                     style = MaterialTheme.textTypography.textSemiBold
                 )
             }
@@ -279,7 +280,7 @@ fun SectionTitleText(modifier: Modifier = Modifier, @StringRes text: Int) {
         modifier = modifier,
         text = stringResource(text),
         style = MaterialTheme.textTypography.textSemiBold,
-        fontSize = 17.sp, color = MaterialTheme.colorScheme.onBackground
+        fontSize = 17.sp, color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -306,7 +307,7 @@ fun DeliverySection(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .padding(top = MaterialTheme.spacing.small, start = 50.dp)
                         .background(
-                            MaterialTheme.colorScheme.onBackground
+                            MaterialTheme.colorScheme.onSurface
                         )
                 )
 

@@ -87,7 +87,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(270.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             shape = RoundedCornerShape(
                 bottomEnd = MaterialTheme.spacing.xxLarge, bottomStart = MaterialTheme.spacing.xxLarge
@@ -272,7 +272,7 @@ fun FormInput(
 @Composable
 private fun FormInputPreview() {
     FoodieTheme {
-        Box(Modifier.background(Color.White)) {
+        Box(Modifier.background(MaterialTheme.colorScheme.inverseOnSurface)) {
             FormInput(
                 modifier = Modifier.padding(16.dp),
                 label = R.string.email_address,
