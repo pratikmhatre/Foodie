@@ -1,6 +1,5 @@
 package cypher.foodie.ui.screens
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,21 +16,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,19 +37,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.di.AppNavigator
 import cypher.foodie.ui.components.AppConstants
-import cypher.foodie.ui.components.FoodieBottomNavigation
+import cypher.foodie.ui.components.FoodMenuItem
 import cypher.foodie.ui.components.MenuListItem
+import cypher.foodie.ui.components.Toolbar
+import cypher.foodie.ui.components.models.Screen
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.roundedTypography
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
-
 
 private val tabs = listOf(
     R.string.food_entries,
@@ -67,12 +60,10 @@ private val tabs = listOf(
     R.string.food_desserts
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
-    var bottomNavPosition by rememberSaveable { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabs.size })
 
     LaunchedEffect(selectedTab) { pagerState.animateScrollToPage(selectedTab) }
@@ -80,39 +71,17 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
     /*LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         if (pagerState.isScrollInProgress.not()) selectedTab = pagerState.currentPage
     }*/
-
     Scaffold(
-        modifier = modifier,
         topBar = {
-            TopAppBar(
-                modifier = Modifier,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                title = {},
-                navigationIcon = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = {}) {
-                            Icon(painter = painterResource(R.drawable.ic_drawer), contentDescription = "Drawer")
-                        }
-                        IconButton(onClick = {}) {
-                            Icon(painter = painterResource(R.drawable.ic_cart), contentDescription = "Drawer")
-                        }
-                    }
-                })
-        },
-        bottomBar = {
-            FoodieBottomNavigation(
-                modifier = Modifier,
-                selectedIndex = bottomNavPosition,
-                onClick = { bottomNavPosition = it })
-        },
-        contentColor = MaterialTheme.colorScheme.background
-    ) {
+            Toolbar(
+                leftNavIcon = R.drawable.ic_drawer,
+                rightNavIcon = R.drawable.ic_cart,
+                rightNavAction = { AppNavigator.navigateTo(Screen.CartScreen) }, onBackClick = {}, title = R.string.blank
+            )
+        }) {
+
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(it)
                 .padding(vertical = MaterialTheme.spacing.extraLarge)
@@ -153,6 +122,7 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
                 DashboardMenuList()
             }
         }
+
     }
 }
 
@@ -214,16 +184,24 @@ fun DashboardMenuList(modifier: Modifier = Modifier) {
         ), contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.extraLarge)
     ) {
         items(count = 10) { index ->
-            val food = AppConstants.menuList.random()
-            MenuListItem(title = food.title, price = food.price, image = food.image) { }
+            val menuItem = AppConstants.menuList.random()
+            MenuListItem(title = menuItem.title, price = menuItem.price, image = menuItem.image) {
+                openDetailsFragment(
+                    menuItem
+                )
+            }
         }
     }
 }
 
+private fun openDetailsFragment(menuItem: FoodMenuItem) {
+    AppNavigator.navigateTo(Screen.ProductDetailsScreen(menuItem.toProductDetails()))
+}
+
 @Preview
 @Composable
-private fun DashboardScreenPreview() {
+private fun HomeScreenPreview() {
     FoodieTheme {
-        DashboardScreen()
+        HomeScreen(Modifier.background(MaterialTheme.colorScheme.background))
     }
 }

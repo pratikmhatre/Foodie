@@ -1,8 +1,6 @@
 package cypher.foodie.ui.components
 
-import android.graphics.text.MeasuredText
 import androidx.annotation.DrawableRes
-import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,21 +18,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.ui.components.AppConstants.navBarTabs
 import cypher.foodie.ui.components.models.ErrorLayoutButton
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.roundedTypography
@@ -57,41 +53,62 @@ import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Toolbar(
     modifier: Modifier = Modifier,
+    @DrawableRes leftNavIcon: Int? = null,
     @StringRes title: Int,
-    @DrawableRes rightNavIcon: Int? = 0,
+    @DrawableRes rightNavIcon: Int? = null,
     rightNavAction: (() -> Unit)? = null,
+    showNavIcons: Boolean = true,
     onBackClick: () -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(60.dp), verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = onBackClick) {
-            Icon(painter = painterResource(R.drawable.ic_back), contentDescription = "back_button")
-        }
-        Text(
-            text = stringResource(title),
-            textAlign = TextAlign.Center,
-            color = Color.Black,
-            fontSize = 18.sp,
-            style = MaterialTheme.textTypography.textSemiBold,
-            modifier = Modifier.weight(1f)
+    Column {
+        TopAppBar(
+            title = {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(title),
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        style = MaterialTheme.textTypography.textSemiBold
+                    )
+
+                }
+            },
+            modifier = modifier.fillMaxWidth(),
+            navigationIcon = {
+                if (showNavIcons) {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            painter = painterResource(leftNavIcon ?: R.drawable.ic_back),
+                            contentDescription = "back_button", tint = Color.DarkGray
+                        )
+                    }
+                }
+            }, actions = {
+                if (showNavIcons) {
+                    rightNavIcon?.let { it ->
+                        IconButton(onClick = { rightNavAction?.invoke() }) {
+                            Icon(
+                                painter = painterResource(it),
+                                contentDescription = "right_action",
+                                tint = Color.DarkGray
+                            )
+                        }
+                    }
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
         )
-        rightNavIcon?.run {
-            IconButton(onClick = { rightNavAction?.invoke() }) {
-                Icon(painter = painterResource(rightNavIcon), contentDescription = "right_action")
-            }
-        }
     }
 }
 
 @Composable
 fun ProfileCard(modifier: Modifier = Modifier) {
-    ElevatedCard {
+    ElevatedCardView {
         Row(verticalAlignment = Alignment.Top, modifier = modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(R.drawable.img_profile_avatar),
@@ -130,7 +147,32 @@ fun ProfileCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ElevatedCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun SmallSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier.height(MaterialTheme.spacing.small))
+}
+
+@Composable
+fun MediumSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier.height(MaterialTheme.spacing.medium))
+}
+
+@Composable
+fun LargeSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier.height(MaterialTheme.spacing.large))
+}
+
+@Composable
+fun ExtraLargeSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier.height(MaterialTheme.spacing.extraLarge))
+}
+
+@Composable
+fun XXLargeSpacer(modifier: Modifier = Modifier) {
+    Spacer(modifier.height(MaterialTheme.spacing.xxLarge))
+}
+
+@Composable
+fun ElevatedCardView(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
@@ -180,13 +222,13 @@ fun BigButton(
 @Composable
 fun ErrorLayout(
     modifier: Modifier = Modifier,
-    @DrawableRes image: Int,
+    @DrawableRes image: Int? = null,
     @StringRes title: Int,
     @StringRes subtitle: Int,
-    buttonData: ErrorLayoutButton
+    buttonData: ErrorLayoutButton? = null
 ) {
-    val shouldShowButton = buttonData.showButton
-    val isPrimaryCTA = buttonData.isPrimaryCTA
+    val shouldShowButton = buttonData?.showButton != false
+    val isPrimaryCTA = buttonData?.isPrimaryCTA != false
 
     Box(
         modifier
@@ -198,18 +240,24 @@ fun ErrorLayout(
                 .fillMaxWidth()
                 .padding(horizontal = 60.dp)
         ) {
-            Image(modifier = Modifier.size(110.dp), contentDescription = null, painter = painterResource(image))
+            image?.run {
+                Image(
+                    modifier = Modifier.size(110.dp),
+                    contentDescription = null,
+                    painter = painterResource(image)
+                )
+            }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             Text(
                 text = stringResource(title),
                 style = MaterialTheme.textTypography.textSemiBold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             Text(
                 text = stringResource(subtitle),
                 style = MaterialTheme.textTypography.textRegular,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.57f)
             )
             if (shouldShowButton && isPrimaryCTA.not()) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
@@ -217,7 +265,7 @@ fun ErrorLayout(
             }
         }
 
-        if (shouldShowButton && isPrimaryCTA) {
+        if (buttonData != null && shouldShowButton && isPrimaryCTA) {
             BigButton(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 text = buttonData.text,
@@ -281,23 +329,18 @@ fun MenuListItem(
                     CircleShape
                 )
         )
+
     }
 }
 
 
 @Composable
 fun FoodieBottomNavigation(modifier: Modifier = Modifier, selectedIndex: Int, onClick: (Int) -> Unit) {
-    val tabItems = listOf(
-        TabItem(Icons.Outlined.Home, Icons.Filled.Home),
-        TabItem(Icons.Outlined.FavoriteBorder, Icons.Outlined.FavoriteBorder),
-        TabItem(Icons.Outlined.Person, Icons.Outlined.Person),
-        TabItem(Icons.Outlined.Refresh, Icons.Outlined.Refresh)
-    )
     BottomAppBar(
         modifier = modifier
             .fillMaxWidth(), containerColor = Color.Transparent
     ) {
-        tabItems.forEachIndexed { index, item ->
+        navBarTabs.forEachIndexed { index, item ->
             val isSelected = index == selectedIndex
             IconButton(onClick = { onClick(index) }, modifier = Modifier.weight(1f)) {
                 Icon(
@@ -358,12 +401,12 @@ private fun MenuListItemPreview() {
 @Composable
 private fun ToolbarPreview() {
     FoodieTheme {
-        Toolbar(
-            modifier = Modifier.background(Color.White),
-            title = R.string.my_profile,
-            onBackClick = {},
-            rightNavIcon = R.drawable.ic_heart,
-            rightNavAction = {})
+        ErrorLayout(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            title = R.string.error_no_orders,
+            subtitle = R.string.error_no_orders_description
+        )
+
     }
 }
 

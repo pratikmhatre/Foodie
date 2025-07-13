@@ -64,5 +64,18 @@
     <string name="faq">Faq</string>
     <string name="settings">Settings</string>
     <string name="rating_n_review">Rating Us</string>
-
+    <string name="delivery_method">Delivery method</string>
+    <string name="door_delivery">Door delivery</string>
+    <string name="store_pickup">Store pickup</string>
+    <string name="continue_to_pay">Continue to pay $42.50</string>
+    <string name="signout">Signout</string>
+    <string name="choose_profile">Choose profile</string>
+    <string name="proceed">Proceed</string>
+    <string name="cancel">Cancel</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="error_no_orders">No orders yet</string>
+    <string name="error_no_orders_description">Seems like you have not ordered with us yet. Hit the button below to start ordering now.</string>
+    <string name="offers_and_coupons"><![CDATA[Offers & Coupons]]></string>
+    <string name="error_no_offers">No offers available</string>
+    <string name="error_no_offers_description"><![CDATA[Seems like you don\'t have any active offers & promotions available at the moment]]></string>
 </resources>

@@ -31,10 +31,10 @@ import cypher.foodie.ui.theme.spacing
 
 
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier) {
+fun WelcomeScreen(modifier: Modifier = Modifier, onGetStartedClicked: () -> Unit) {
     FoodieTheme {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary), contentAlignment = Alignment.TopStart
         ) {
@@ -101,8 +101,8 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             BigButton(
                 text = R.string.get_started,
                 isPrimaryButton = false,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) { }
+                modifier = Modifier.align(Alignment.BottomCenter), onClick = onGetStartedClicked
+            )
         }
     }
 }
@@ -110,5 +110,5 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    WelcomeScreen(onGetStartedClicked = {})
 }

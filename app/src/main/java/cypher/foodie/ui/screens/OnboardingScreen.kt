@@ -46,7 +46,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.di.AppNavigator
 import cypher.foodie.ui.components.BigButton
+import cypher.foodie.ui.components.models.Screen
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
@@ -77,8 +79,8 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
     ) {
         HorizontalPager(modifier = Modifier.fillMaxSize(), state = pagerState) {
             when (it) {
-                0 -> LoginFrame()
-                1 -> SignupFrame()
+                0 -> LoginFrame(onLoginClicked = { AppNavigator.navigateTo(Screen.MainTabsScreen) })
+                1 -> SignupFrame(onSignupClicked = { AppNavigator.navigateTo(Screen.MainTabsScreen) })
             }
         }
         Card(
@@ -103,9 +105,19 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.align(Alignment.BottomCenter), divider = {},
                 ) {
                     tabs.forEachIndexed { index, tab ->
-                        Tab(selected = selectedTab == index, text = { Text(tab.title, style = MaterialTheme.textTypography.textSemiBold, fontSize = 18.sp, color = Color.Black) }, onClick = {
-                            selectedTab = index
-                        })
+                        Tab(
+                            selected = selectedTab == index,
+                            text = {
+                                Text(
+                                    tab.title,
+                                    style = MaterialTheme.textTypography.textSemiBold,
+                                    fontSize = 18.sp,
+                                    color = Color.Black
+                                )
+                            },
+                            onClick = {
+                                selectedTab = index
+                            })
                     }
                 }
             }
@@ -115,7 +127,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoginFrame(modifier: Modifier = Modifier) {
+fun LoginFrame(modifier: Modifier = Modifier, onLoginClicked: () -> Unit) {
     var emailAddress by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
@@ -147,12 +159,17 @@ fun LoginFrame(modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.primary
             )
         }
-        BigButton(modifier = Modifier.align(Alignment.BottomCenter), isPrimaryButton = true, text = R.string.login) { }
+        BigButton(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            isPrimaryButton = true,
+            text = R.string.login,
+            onClick = onLoginClicked
+        )
     }
 }
 
 @Composable
-fun SignupFrame(modifier: Modifier = Modifier) {
+fun SignupFrame(modifier: Modifier = Modifier, onSignupClicked: () -> Unit) {
     var name by rememberSaveable { mutableStateOf("") }
     var emailAddress by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -162,7 +179,7 @@ fun SignupFrame(modifier: Modifier = Modifier) {
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center
     ) {
-        Column(Modifier.padding(MaterialTheme.spacing.extraLarge), verticalArrangement = Arrangement.Center ) {
+        Column(Modifier.padding(MaterialTheme.spacing.extraLarge), verticalArrangement = Arrangement.Center) {
             FormInput(
                 modifier = Modifier,
                 label = R.string.name,
@@ -185,7 +202,12 @@ fun SignupFrame(modifier: Modifier = Modifier) {
                 isPassword = true,
                 onTextChanged = { password = it })
         }
-        BigButton(isPrimaryButton = true, text = R.string.signup, modifier = Modifier.align(Alignment.BottomCenter)) { }
+        BigButton(
+            isPrimaryButton = true,
+            text = R.string.signup,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onClick = onSignupClicked
+        )
     }
 }
 
@@ -266,7 +288,7 @@ private fun FormInputPreview() {
 @Composable
 private fun LoginFramePreview() {
     FoodieTheme {
-        LoginFrame()
+        LoginFrame(onLoginClicked = {})
     }
 }
 
@@ -274,7 +296,7 @@ private fun LoginFramePreview() {
 @Composable
 private fun SignupFramePreview() {
     FoodieTheme {
-        SignupFrame()
+        SignupFrame(onSignupClicked = {})
     }
 }
 

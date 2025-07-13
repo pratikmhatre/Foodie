@@ -41,6 +41,12 @@ data class TextTypography(
         letterSpacing = 0.sp,
         fontWeight = FontWeight.Bold
     ),
+    val textMedium: TextStyle = TextStyle(
+        fontFamily = textFamily,
+        fontSize = 16.sp,
+        letterSpacing = 0.sp,
+        fontWeight = FontWeight.Medium
+    ),
     val textSemiBold: TextStyle = TextStyle(
         fontFamily = textFamily,
         fontSize = 16.sp,

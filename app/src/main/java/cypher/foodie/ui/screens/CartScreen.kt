@@ -25,6 +25,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,89 +39,72 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
+import cypher.foodie.di.AppNavigator
+import cypher.foodie.ui.components.AppConstants.cartList
 import cypher.foodie.ui.components.BigButton
-import cypher.foodie.ui.components.ElevatedCard
+import cypher.foodie.ui.components.CartItemData
+import cypher.foodie.ui.components.ElevatedCardView
 import cypher.foodie.ui.components.Toolbar
+import cypher.foodie.ui.components.models.Screen
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.roundedTypography
 import cypher.foodie.ui.theme.spacing
 import cypher.foodie.ui.theme.textTypography
 
-data class CartItemData(
-    @StringRes val title: Int,
-    @StringRes val price: Int,
-    @DrawableRes val image: Int,
-    val quantity: Int,
-    val isFavourite: Boolean = false
-)
-
 @Composable
 fun CartScreen(modifier: Modifier = Modifier) {
-    val cartList = listOf(
-        CartItemData(
-            title = R.string.item_name_moi_koi,
-            price = R.string.price_1,
-            image = R.drawable.img_moi_koi,
-            quantity = 1
-        ),
-        CartItemData(
-            title = R.string.item_name_veggie_mix,
-            price = R.string.price_2,
-            image = R.drawable.img_fried_chicken_mix,
-            quantity = 4
-        ),
-        CartItemData(
-            title = R.string.item_name_moi_koi,
-            price = R.string.price_1,
-            image = R.drawable.img_moi_koi,
-            quantity = 2
-        ),
-        CartItemData(
-            title = R.string.item_name_moi_koi,
-            price = R.string.price_1,
-            image = R.drawable.img_moi_koi,
-            quantity = 6
-        ),
-    )
-    Scaffold(modifier = modifier, topBar = {
+    var cartListData by rememberSaveable { mutableStateOf(cartList) }
+
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Toolbar(
             modifier = Modifier,
             title = R.string.cart,
-            onBackClick = {}, rightNavIcon = null, rightNavAction = {})
-    }, bottomBar = {
-        BigButton(text = R.string.checkout) { }
-    }) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(R.string.swipe_to_delete),
-                style = MaterialTheme.textTypography.textRegular,
-                fontSize = 10.sp, modifier = Modifier.padding(vertical = MaterialTheme.spacing.large)
+            rightNavIcon = R.drawable.ic_heart,
+            rightNavAction = { AppNavigator.navigateTo(Screen.WishListScreen()) },
+            onBackClick = { AppNavigator.goBack() })
+        Text(
+            text = stringResource(R.string.swipe_to_delete),
+            style = MaterialTheme.textTypography.textRegular,
+            fontSize = 10.sp, modifier = Modifier.padding(vertical = MaterialTheme.spacing.large)
+        )
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.extraLarge),
+            verticalArrangement = Arrangement.spacedBy(
+                MaterialTheme.spacing.large
             )
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.extraLarge),
-                verticalArrangement = Arrangement.spacedBy(
-                    MaterialTheme.spacing.large
-                )
-            ) {
-                items(cartList) {
-                    CartItem(modifier = Modifier, cartItemData = it)
-                }
+        ) {
+            items(cartListData) { cartItem ->
+                CartItem(modifier = Modifier, cartItemData = cartItem, onQuantityChanged = { isAdding ->
+                    if (isAdding) {
+                        cartListData = cartListData.map {
+                            if (it.title == cartItem.title) {
+                                it.copy(quantity = it.quantity + 1)
+                            } else {
+                                it
+                            }
+                        }.filter { it.quantity > 0 }
+                    }
+                })
             }
+        }
+        BigButton(text = R.string.checkout) {
+            AppNavigator.navigateTo(Screen.CheckoutScreen)
         }
     }
 }
 
 @Composable
-fun CartItem(modifier: Modifier = Modifier, cartItemData: CartItemData) {
-    ElevatedCard(
+fun CartItem(modifier: Modifier = Modifier, cartItemData: CartItemData, onQuantityChanged: (Boolean) -> Unit) {
+    ElevatedCardView(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
+            .clickable { AppNavigator.navigateTo(Screen.ProductDetailsScreen(cartItemData.toFoodMenuDetails())) }
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -145,7 +132,13 @@ fun CartItem(modifier: Modifier = Modifier, cartItemData: CartItemData) {
                     )
                 }
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd) {
-                    Counter(Modifier, value = cartItemData.quantity.toString(), onAdd = { }, onRemove = { })
+                    Counter(
+                        Modifier,
+                        value = cartItemData.quantity.toString(),
+                        onAdd = { onQuantityChanged(true) },
+                        onRemove = {
+                            onQuantityChanged(false)
+                        })
                 }
             }
         }

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cypher.foodie.R
 import cypher.foodie.ui.components.BigButton
-import cypher.foodie.ui.components.ElevatedCard
+import cypher.foodie.ui.components.ElevatedCardView
 import cypher.foodie.ui.components.Toolbar
 import cypher.foodie.ui.theme.FoodieTheme
 import cypher.foodie.ui.theme.spacing
@@ -38,7 +38,7 @@ import cypher.foodie.ui.theme.textTypography
 fun ProfileScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier, containerColor = MaterialTheme.colorScheme.background,
-        topBar = { Toolbar(modifier = Modifier, title = R.string.my_profile, rightNavIcon = null) { } }, bottomBar = {
+        topBar = { Toolbar(modifier = Modifier, title = R.string.my_profile) { } }, bottomBar = {
             BigButton(text = R.string.update_profile, isPrimaryButton = true) {
 
             }
@@ -56,7 +56,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                         fontSize = 17.sp
                     )
                     Spacer(Modifier.height(MaterialTheme.spacing.large))
-                    ElevatedCard {
+                    ElevatedCardView {
                         Row(verticalAlignment = Alignment.Top, modifier = Modifier.fillMaxWidth()) {
                             Image(
                                 painter = painterResource(R.drawable.img_profile_avatar),
@@ -96,7 +96,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                         fontSize = 17.sp
                     )
                     Spacer(Modifier.height(MaterialTheme.spacing.large))
-                    ElevatedCard(Modifier.fillMaxWidth()) {
+                    ElevatedCardView(Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier) {
                             PaymentItem(
                                 icon = R.drawable.ic_credit_card,
@@ -150,7 +150,7 @@ fun PaymentItem(
             Text(
                 text = stringResource(text),
                 style = MaterialTheme.textTypography.textRegular,
-                fontSize = 16.sp
+                fontSize = 15.sp
             )
         }
         if (isLastItem.not()) {
@@ -158,8 +158,9 @@ fun PaymentItem(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color.LightGray)
+                    .height(0.2.dp)
+                    .padding(start = 50.dp)
+                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
             )
         }
     }
