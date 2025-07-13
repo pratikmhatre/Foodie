@@ -3,9 +3,13 @@ package cypher.foodie.ui.components
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Refresh
 import cypher.foodie.R
@@ -82,8 +86,8 @@ object AppConstants {
 
     val navBarTabs = listOf(
         TabItem(Icons.Outlined.Home, Icons.Filled.Home),
-        TabItem(Icons.Outlined.FavoriteBorder, Icons.Outlined.FavoriteBorder),
-        TabItem(Icons.Outlined.Person, Icons.Outlined.Person),
-        TabItem(Icons.Outlined.Refresh, Icons.Outlined.Refresh)
+        TabItem(Icons.Outlined.FavoriteBorder, Icons.Filled.Favorite),
+        TabItem(Icons.Outlined.Person, Icons.Filled.Person),
+        TabItem(Icons.Outlined.Notifications, Icons.Filled.Notifications)
     )
 }

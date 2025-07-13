@@ -25,6 +25,10 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import cypher.foodie.R
 import cypher.foodie.di.AppNavigator
 import cypher.foodie.ui.components.BigButton
@@ -60,7 +65,11 @@ fun CheckoutScreen(modifier: Modifier = Modifier) {
     }, bottomBar = {
         BigButton(text = R.string.continue_to_pay) { }
     }) { padding ->
+        var showAddressDialog by rememberSaveable { mutableStateOf(false) }
 
+        if (showAddressDialog) {
+            AddressDialog(onDismiss = { showAddressDialog = false })
+        }
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -68,7 +77,7 @@ fun CheckoutScreen(modifier: Modifier = Modifier) {
                 .fillMaxSize(), horizontalAlignment = Alignment.Start
         ) {
             ExtraLargeSpacer()
-            ProfileSection()
+            ProfileSection(onChangeClicked = { showAddressDialog = true })
             XXLargeSpacer()
             DeliverySection()
             XXLargeSpacer()
@@ -78,13 +87,14 @@ fun CheckoutScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ProfileSection(modifier: Modifier = Modifier) {
+fun ProfileSection(modifier: Modifier = Modifier, onChangeClicked: () -> Unit) {
+
     Column(modifier) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             SectionTitleText(text = R.string.personal_details)
             Text(
                 modifier = Modifier.clickable {
-                    showAddressDialog()
+                    onChangeClicked()
                 },
                 text = stringResource(R.string.change),
                 fontSize = 14.sp,
@@ -137,139 +147,137 @@ fun ProfileSection(modifier: Modifier = Modifier) {
     }
 }
 
-private fun showAddressDialog() {
-
-}
-
 @Composable
-fun AddressDialog(modifier: Modifier = Modifier) {
-    Card(
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = MaterialTheme.spacing.extraLarge)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(start = MaterialTheme.spacing.xxLarge)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = MaterialTheme.spacing.large,
-                            topEnd = MaterialTheme.spacing.large
-                        )
-                    ), contentAlignment = Alignment.CenterStart
-            ) {
-                Text(
-                    text = stringResource(R.string.choose_profile),
-                    style = MaterialTheme.textTypography.textMedium,
-                    fontSize = 18.sp
-                )
-            }
-            ExtraLargeSpacer()
-            Column(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLarge)) {
-                Text(
-                    "Delivery to David Parker".uppercase(),
-                    style = MaterialTheme.textTypography.textMedium,
-                    fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
-                SmallSpacer()
-                Row {
-                    Text(
-                        "3.5km",
-                        style = MaterialTheme.textTypography.textRegular,
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(Modifier.width(MaterialTheme.spacing.medium))
-                    Text(
-                        "30 min",
-                        style = MaterialTheme.textTypography.textRegular,
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            HorizontalDivider(
-                Modifier
-                    .height(0.1.dp)
-                    .fillMaxWidth()
-                    .padding(
-                        top = MaterialTheme.spacing.large,
-                        start = MaterialTheme.spacing.extraLarge,
-                        end = MaterialTheme.spacing.extraLarge
-                    )
-                    .background(
-                        MaterialTheme.colorScheme.onSurface
-                    )
-            )
-
-            XXLargeSpacer()
-
-            Column(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLarge)) {
-                Text(
-                    "Delivery to David Parker".uppercase(),
-                    style = MaterialTheme.textTypography.textMedium,
-                    fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
-                SmallSpacer()
-                Row {
-                    Text(
-                        "1km",
-                        style = MaterialTheme.textTypography.textRegular,
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(Modifier.width(MaterialTheme.spacing.medium))
-                    Text(
-                        "10 min",
-                        style = MaterialTheme.textTypography.textRegular,
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(all = MaterialTheme.spacing.extraLarge)
+fun AddressDialog(modifier: Modifier = Modifier, onDismiss: () -> Unit) {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = MaterialTheme.shapes.large,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseOnSurface),
+            modifier = modifier
+                .width(650.dp)
+                .padding(horizontal = MaterialTheme.spacing.extraLarge)
         ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(start = MaterialTheme.spacing.xxLarge)
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = MaterialTheme.spacing.large,
+                                topEnd = MaterialTheme.spacing.large
+                            )
+                        ), contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = stringResource(R.string.choose_address),
+                        style = MaterialTheme.textTypography.textMedium,
+                        fontSize = 18.sp
+                    )
+                }
+                ExtraLargeSpacer()
+                Column(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLarge)) {
+                    Text(
+                        "Delivery to David Parker".uppercase(),
+                        style = MaterialTheme.textTypography.textMedium,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                    SmallSpacer()
+                    Row {
+                        Text(
+                            "3.5km",
+                            style = MaterialTheme.textTypography.textRegular,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(MaterialTheme.spacing.medium))
+                        Text(
+                            "30 min",
+                            style = MaterialTheme.textTypography.textRegular,
+                            fontSize = 15.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
 
-            Text(
-                modifier = Modifier,
-                text = stringResource(R.string.cancel),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black.copy(alpha = 0.5f),
-                style = MaterialTheme.textTypography.textSemiBold
-            )
-            Spacer(Modifier.width(50.dp))
-            Button(
-                modifier = Modifier
-                    .height(70.dp)
-                    .background(Color.Transparent)
-                    .weight(1f),
-                onClick = {},
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                HorizontalDivider(
+                    Modifier
+                        .height(0.1.dp)
+                        .fillMaxWidth()
+                        .padding(
+                            top = MaterialTheme.spacing.large,
+                            start = MaterialTheme.spacing.extraLarge,
+                            end = MaterialTheme.spacing.extraLarge
+                        )
+                        .background(
+                            MaterialTheme.colorScheme.onSurface
+                        )
+                )
+
+                XXLargeSpacer()
+
+                Column(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraLarge)) {
+                    Text(
+                        "Delivery to David Parker".uppercase(),
+                        style = MaterialTheme.textTypography.textMedium,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                    SmallSpacer()
+                    Row {
+                        Text(
+                            "1km",
+                            style = MaterialTheme.textTypography.textRegular,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.width(MaterialTheme.spacing.medium))
+                        Text(
+                            "10 min",
+                            style = MaterialTheme.textTypography.textRegular,
+                            fontSize = 15.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(all = MaterialTheme.spacing.extraLarge)
             ) {
+
                 Text(
-                    text = stringResource(R.string.proceed),
+                    modifier = Modifier.clickable { onDismiss() },
+                    text = stringResource(R.string.cancel),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = Color.Black.copy(alpha = 0.5f),
                     style = MaterialTheme.textTypography.textSemiBold
                 )
-            }
+                Spacer(Modifier.width(50.dp))
+                Button(
+                    modifier = Modifier
+                        .height(70.dp)
+                        .background(Color.Transparent)
+                        .weight(1f),
+                    onClick = onDismiss,
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = stringResource(R.string.proceed),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                        style = MaterialTheme.textTypography.textSemiBold
+                    )
+                }
 
+            }
         }
     }
 }
@@ -355,6 +363,6 @@ fun PaymentSection(modifier: Modifier = Modifier) {
 @Composable
 private fun CheckoutScreenPreview() {
     FoodieTheme {
-        ProfileSection(Modifier)
+        CheckoutScreen()
     }
 }
