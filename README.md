@@ -1,6 +1,8 @@
-# Foodie
+# Foodie - Food For Everyone
 
-Jetpack Compose Android App
+Foodie is a demo food ordering app made with Kotlin & Jetpack Compose.
+This is a **UI Only** project with **NO ARCHITECTURE & NO BUSINESS LOGIC** added.
+For basic navigation, Foodie uses **Navigation 3** library.
 
 ## Progress
 <div style="display: flex; flex-direction: row;">  
